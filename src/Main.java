@@ -1,15 +1,43 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.util.Collections;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        Scanner leitura = new Scanner(System.in);
+        System.out.println("Digite o limite do cartão: ");
+        double limite = leitura.nextDouble();
+        CartaoDeCredito cartao = new CartaoDeCredito(limite);
+
+        int sair = 1;
+        while(sair != 0) {
+            System.out.println("Digite a descrição da compra:");
+            String descricao = leitura.next();
+
+            System.out.println("Digite o valor da compra:");
+            double valor = leitura.nextDouble();
+
+            Compra compra = new Compra(descricao, valor);
+            boolean compraRealizada = cartao.lancaCompra(compra);
+
+            if (compraRealizada) {
+                System.out.println("Compra realizada!" + "\n" +
+                        "Digite 0 para sair ou 1 para continuar");
+                sair = leitura.nextInt();
+            } else {
+                System.out.println("Saldo insuficiente!");
+                sair = 0;
+            }
         }
+
+        System.out.println("***********************" + "COMPRAS REALIZADAS:\n");
+
+        Collections.sort(cartao.getCompras());
+
+        for (Compra c : cartao.getCompras())
+            System.out.println(c.getDescricao() + " - " +c.getValor());
+
+        System.out.println("\n***********************" +
+                "\nSaldo do cartão: " +cartao.getSaldo());
     }
 }
